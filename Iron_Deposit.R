@@ -12,7 +12,7 @@ library(openxlsx)
 library(ggplot2)
 library(viridis)
 
-df <- read_excel("Drill_Holes_Iron_Emman.xlsx", sheet = "Dataset")
+df <- read_excel("Drill_Holes_Iron.xlsx", sheet = "Dataset")
 df <- df[ , 1:8]
 
 dim(df)
@@ -136,7 +136,7 @@ print(df_clean)
 
 ##########################################
 
-# write.xlsx(df_clean, "Drill_Holes_Iron_Emman_Clean.xlsx", rowNames = FALSE)
+# write.xlsx(df_clean, "Drill_Holes_Iron_Clean.xlsx", rowNames = FALSE)
 
 ##########################################
 
