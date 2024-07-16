@@ -1,2 +1,3 @@
-# IronOreGeospatial
-Geostatistics analysis of a Iron deposit dataset.
+# Iron Ore Geospatial
+
+Geostatistical analysis of an Iron deposit dataset.
