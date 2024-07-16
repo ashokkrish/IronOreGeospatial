@@ -64,6 +64,8 @@ quantile(v,  probs = c(10, 50, 80)/100)
 
 quantile(v)
 
+?fivenum
+
 fivenum(v)
 
 # fivenum function returns Tukey's 5-number (min, lower-hinge, median, upper-hinge, max) summary.
@@ -77,6 +79,7 @@ summary(v)
 x <- c(1,2,NA,3)
 mean(x) # returns NA
 mean(x, na.rm=TRUE) # returns 2
+
 b <- seq(1:10)
 
 plot(b, b^2)
