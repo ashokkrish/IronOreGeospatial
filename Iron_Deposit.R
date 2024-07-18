@@ -5,17 +5,25 @@
 # install.packages("viridis")
 # install.packages("openxlsx")
 # install.packages("tidyr")
+# install.packages("sp")
+# install.packages("sf")
+# install.packages("ggspatial")
+# install.packages("gstat")
 
 ## Clear all of the objects from your workspace to start with a clean environment
- rm(list = ls())
+rm(list = ls())
 
 # Load libraries
 library(readxl)
-library(dplyr)
+library(dplyr)     # data manipulation
 library(openxlsx)
-library(ggplot2)
+library(ggplot2)   # plotting
 library(viridis)
 library(tidyr)
+library(sp)
+library(sf)
+library(ggspatial)
+library(gstat)     # geostatistics
 
 df <- read_excel("Drill_Holes_Iron.xlsx", sheet = "Dataset")
 df <- df[ , 1:8]
@@ -38,6 +46,7 @@ df_clean <- df %>%
 
 dim(df_clean)
 names(df_clean)
+class(df_clean)
 head(df_clean)
 
 # Define a mode function to get the most frequent value
@@ -160,6 +169,42 @@ ggplot(df_merged, aes(x = East, y = North, color = Fe)) +
     panel.grid.major = element_blank(),                    # Remove major grid lines
     panel.grid.minor = element_blank()                     # Remove minor grid lines
   )
+
+#--------------------------#
+# Constructing a variogram #
+#--------------------------#
+
+coordinates(df_clean) = ~East+North
+class(df_clean)
+
+?variogram
+
+# ?variogram gives as a default for argument width the value cutoff/15, 
+# which causes the default of 15 points. If you make the value for 
+# width smaller, you will see more points. 
+
+methods(variogram)
+
+vgm1 <- variogram(Fe~1, df_clean)
+vgm1
+
+summary(vgm1)
+
+plot(vgm1, main = "Variogram: Iron Ore Deposit", pch = 19, xlab = "Distance", ylab = "Semivariance")
+
+#?fit.variogram
+
+model.1 <- fit.variogram(vgm1, vgm(psill = 2, model = "Sph", range = 50, nugget = 0.5))
+model.1
+
+summary(model.1)
+
+plot(vgm1, model=model.1, pch = 19, xlab = "Distance", ylab = "Semivariance")
+
+
+
+
+
 
 ##########################################
 
