@@ -4,7 +4,6 @@
 
 This data frame consists of 1243 rows and 8 columns. The column names are
 
-    /
     |---East (X)
     |---North (Y)
     |---Elevation (Z)
@@ -13,7 +12,6 @@ This data frame consists of 1243 rows and 8 columns. The column names are
     |---Mn (%)
     |---P (%)
     |---Lithology
-    |
 
 ## Key features
 
