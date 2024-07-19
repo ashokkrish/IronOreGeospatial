@@ -38,6 +38,12 @@ There were several rows with partial or completely missing values (replaced by -
 
 **Variogram Models**
 
+| Model | Definition |
+| --------- | ---------- |
+| Exp | Exponential. |
+| Sph | Spherical. |
+| Gau | Gaussian. |
+
 **Kriging**
 
 ## Data Source
