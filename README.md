@@ -28,7 +28,7 @@ There were several rows with partial or completely missing values (replaced by -
 
 ## Collaborators
 
-[Dr. Nasser Madanai]([https://research.nu.edu.kz/en/persons/nasser-madani]), [Dr. Emmanouil Varouchakis]([https://github.com/evarouchakis]) and [Dr. Ashok Krishnamurthy]([https://github.com/ashokkrish]).
+[Dr. Nasser Madanai](https://research.nu.edu.kz/en/persons/nasser-madani), [Dr. Emmanouil Varouchakis]([https://github.com/evarouchakis]) and [Dr. Ashok Krishnamurthy]([https://github.com/ashokkrish]).
 
 ## Feedback
 
