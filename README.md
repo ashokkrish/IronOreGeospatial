@@ -22,11 +22,15 @@ There were several rows with partial or completely missing values (replaced by -
 
 **Descriptive Statistics**
 
+**Frequency Distributions and Cross Tables**
+
 **Exploratory Data Analysis**
 
 **Variogram**
 
 **Variogram Parameters**
+
+**Variogram Models**
 
 **Kriging**
 
