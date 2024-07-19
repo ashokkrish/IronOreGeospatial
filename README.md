@@ -28,7 +28,8 @@ There were several rows with partial or completely missing values (replaced by -
 
 **Variogram**
 
-![image](https://github.com/user-attachments/assets/9b8bbdff-7c31-41ad-beed-114f2ac0ce35)
+![image](https://github.com/user-attachments/assets/e63d4fb9-8069-4bc5-bcf1-9c871251638e)
+
 
 
 **Variogram Parameters**
