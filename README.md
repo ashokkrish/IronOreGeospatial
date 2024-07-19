@@ -20,9 +20,15 @@ This data frame consists of 1243 rows and 8 columns. The column names are
 
 There were several rows with partial or completely missing values (replaced by -99). We removed such rows and the cleaned data frame consists of 607 rows and 8 columns. We noticed there were repeated data collected at the same East (X) and North (Y) but at varying Elevations (Z). We decided to merge such rows into a single row by averaging the values for the numerical variable and replace the mode value for the categorical variable (Lithology). The merged data frame consists of 181 rows and 8 columns.
 
+**Variogram Parameters**
+
 ## Data Source
 
+[Dr. Nasser Madanai]([https://research.nu.edu.kz/en/persons/nasser-madani]).
+
 ## Collaborators
+
+[Dr. Nasser Madanai]([https://research.nu.edu.kz/en/persons/nasser-madani]), [Dr. Emmanouil Varouchakis]([https://github.com/evarouchakis]) and [Dr. Ashok Krishnamurthy]([https://github.com/ashokkrish]).
 
 ## Feedback
 
