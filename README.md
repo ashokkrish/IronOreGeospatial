@@ -24,11 +24,11 @@ There were several rows with partial or completely missing values (replaced by -
 
 ## Data Source
 
-[Dr. Nasser Madanai]([https://research.nu.edu.kz/en/persons/nasser-madani]).
+[Dr. Nasser Madani](https://research.nu.edu.kz/en/persons/nasser-madani).
 
 ## Collaborators
 
-[Dr. Nasser Madanai](https://research.nu.edu.kz/en/persons/nasser-madani), [Dr. Emmanouil Varouchakis]([https://github.com/evarouchakis]) and [Dr. Ashok Krishnamurthy]([https://github.com/ashokkrish]).
+[Dr. Nasser Madani](https://research.nu.edu.kz/en/persons/nasser-madani), [Dr. Emmanouil Varouchakis](https://github.com/evarouchakis) and [Dr. Ashok Krishnamurthy](https://github.com/ashokkrish).
 
 ## Feedback
 
