@@ -30,6 +30,12 @@ There were several rows with partial or completely missing values (replaced by -
 
 **Variogram Parameters**
 
+| Parameter | Definition |
+| --------- | ---------- |
+| &sill; | Limit of the variogram tending to infinity lag distances. |
+| &range; | The distance in which the difference of the variogram from the sill becomes negligible. |
+| &nugget; | The height of the jump of the semivariogram at the discontinuity at the origin. |
+
 **Variogram Models**
 
 **Kriging**
