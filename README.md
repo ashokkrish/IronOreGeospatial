@@ -1,4 +1,4 @@
-# Geostatistical analysis of an Iron deposit dataset
+# Geostatistical analysis of an Iron Ore Deposit
 
 ## Overview
 
