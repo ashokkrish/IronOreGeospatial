@@ -9,6 +9,7 @@
 # install.packages("sf")
 # install.packages("ggspatial")
 # install.packages("gstat")
+# install.packages("automap")
 
 ## Clear all of the objects from your workspace to start with a clean environment
 rm(list = ls())
@@ -24,6 +25,7 @@ library(sp)
 library(sf)
 library(ggspatial)
 library(gstat)     # geostatistics
+library(automap)
 
 df <- read_excel("Drill_Holes_Iron.xlsx", sheet = "Dataset")
 df <- df[ , 1:8]
@@ -72,9 +74,103 @@ dim(df_merged)
 names(df_merged)
 head(df_merged)
 
-#----------------------------------------------#
-# Export the clean data frame to an Excel file #
-#----------------------------------------------#
+#--------------------------#
+# Constructing a variogram #
+#--------------------------#
+
+# Display the variability between data points as a function of distance.
+
+coordinates(df_merged) <- ~East+North
+
+coordinates(df_merged)
+class(df_merged)
+
+#?variogram
+
+# ?variogram gives as a default for argument width the value cutoff/15, 
+# which causes the default of 15 points. If you make the value for 
+# width smaller, you will see more points. 
+
+methods(variogram)
+
+vgm1 <- variogram(Fe~1, df_merged)
+vgm1
+
+summary(vgm1)
+
+plot(vgm1, main = "Variogram: Iron Ore Deposit", pch = 19, xlab = "Distance", ylab = "Semivariance")
+
+#?fit.variogram
+#?vgm
+
+model.1 <- fit.variogram(vgm1, vgm(psill = 20, model = "Sph", range = 500, nugget = 0.5))
+model.1
+
+summary(model.1)
+attr(model.1, "SSErr")
+
+plot(vgm1, model=model.1, main = "Fitted Variogram: Iron Ore Deposit", pch = 19, xlab = "Distance", ylab = "Semivariance")
+
+#-----------------------------------------#
+# Define the spatial grid for predictions #
+#-----------------------------------------#
+
+grid <- expand.grid(
+  East = seq(min(df_merged$East), max(df_merged$East)+50, by = 50),
+  North = seq(min(df_merged$North), max(df_merged$North)+50, by = 50)
+)
+
+min(df_merged$East)
+max(df_merged$East)
+
+min(df_merged$North)
+max(df_merged$North)
+
+head(grid)
+tail(grid)
+
+coordinates(grid) <- ~East + North
+gridded(grid) <- TRUE
+
+# Perform Ordinary Kriging using automap
+kriging_result <- autoKrige(Fe ~ 1, df_merged, new_data = grid)
+
+# Extract the Kriging predictions
+kriging_pred <- kriging_result$krige_output@data
+kriging_pred$East <- coordinates(grid)[, 1]
+kriging_pred$North <- coordinates(grid)[, 2]
+
+# Convert to a data frame
+kriging_df <- as.data.frame(kriging_pred)
+
+# Plot the Kriging predictions
+ggplot() +
+  geom_tile(data = kriging_df, aes(x = East, y = North, fill = var1.pred)) +
+  scale_fill_viridis(name = "Fe (%)", option = "C") +
+  geom_point(data = as.data.frame(df_merged), aes(x = East, y = North, color = Fe), size = 2) +
+  scale_color_viridis(name = "Fe (%)", option = "C") +
+  theme_minimal() +
+  labs(title = "Kriging Predictions for Iron Ore Fe Concentration",
+       x = "East",
+       y = "North")
+
+# Plot the Kriging variance
+ggplot() +
+  geom_tile(data = kriging_df, aes(x = East, y = North, fill = var1.var)) +
+  scale_fill_viridis(name = "Variance", option = "C") +
+  geom_point(data = as.data.frame(df_merged), aes(x = East, y = North, color = Fe), size = 2) +
+  scale_color_viridis(name = "Fe (%)", option = "C") +
+  theme_minimal() +
+  labs(title = "Kriging Variance for Iron Ore Fe Concentration",
+       x = "East",
+       y = "North")
+
+#-----------------------------------------------------------#
+# Export the cleaned and merged data frame to an Excel file #
+#-----------------------------------------------------------#
+
+df_merged <- as.data.frame(df_merged)
+class(df_merged)
 
 write.xlsx(df_clean, "Drill_Holes_Iron_Clean.xlsx", rowNames = FALSE)
 write.xlsx(df_merged, "Drill_Holes_Iron_Merged.xlsx", rowNames = FALSE)
@@ -169,41 +265,6 @@ ggplot(df_merged, aes(x = East, y = North, color = Fe)) +
     panel.grid.major = element_blank(),                    # Remove major grid lines
     panel.grid.minor = element_blank()                     # Remove minor grid lines
   )
-
-#--------------------------#
-# Constructing a variogram #
-#--------------------------#
-
-coordinates(df_clean) = ~East+North
-class(df_clean)
-
-?variogram
-
-# ?variogram gives as a default for argument width the value cutoff/15, 
-# which causes the default of 15 points. If you make the value for 
-# width smaller, you will see more points. 
-
-methods(variogram)
-
-vgm1 <- variogram(Fe~1, df_clean)
-vgm1
-
-summary(vgm1)
-
-plot(vgm1, main = "Variogram: Iron Ore Deposit", pch = 19, xlab = "Distance", ylab = "Semivariance")
-
-#?fit.variogram
-
-model.1 <- fit.variogram(vgm1, vgm(psill = 2, model = "Sph", range = 50, nugget = 0.5))
-model.1
-
-summary(model.1)
-
-plot(vgm1, model=model.1, pch = 19, xlab = "Distance", ylab = "Semivariance")
-
-
-
-
 
 
 ##########################################
