@@ -98,7 +98,7 @@ vgm1
 
 summary(vgm1)
 
-plot(vgm1, main = "Variogram: Iron Ore Deposit", pch = 19, xlab = "Distance", ylab = "Semivariance")
+plot(vgm1, main = "Variogram: Iron Ore Concentration", pch = 19, xlab = "Distance", ylab = "Semivariance")
 
 #?fit.variogram
 #?vgm
@@ -109,7 +109,7 @@ model.1
 summary(model.1)
 attr(model.1, "SSErr")
 
-plot(vgm1, model=model.1, main = "Fitted Variogram: Iron Ore Deposit", pch = 19, xlab = "Distance", ylab = "Semivariance")
+plot(vgm1, model = model.1, main = "Fitted Variogram: Iron Ore Concentration", pch = 19, xlab = "Distance", ylab = "Semivariance")
 
 #-----------------------------------------#
 # Define the spatial grid for predictions #
@@ -132,7 +132,12 @@ tail(grid)
 coordinates(grid) <- ~East + North
 gridded(grid) <- TRUE
 
-# Perform Ordinary Kriging using automap
+#------------------------------------------------#
+# Perform Ordinary Kriging using automap package #
+#------------------------------------------------#
+
+#?autoKrige
+
 kriging_result <- autoKrige(Fe ~ 1, df_merged, new_data = grid)
 
 # Extract the Kriging predictions
@@ -150,9 +155,9 @@ ggplot() +
   geom_point(data = as.data.frame(df_merged), aes(x = East, y = North, color = Fe), size = 2) +
   scale_color_viridis(name = "Fe (%)", option = "C") +
   theme_minimal() +
-  labs(title = "Kriging Predictions for Iron Ore Fe Concentration",
-       x = "East",
-       y = "North")
+  labs(title = "Kriging Predictions for Iron Ore Concentration",
+       x = "East (X)",
+       y = "North (Y)")
 
 # Plot the Kriging variance
 ggplot() +
@@ -161,9 +166,9 @@ ggplot() +
   geom_point(data = as.data.frame(df_merged), aes(x = East, y = North, color = Fe), size = 2) +
   scale_color_viridis(name = "Fe (%)", option = "C") +
   theme_minimal() +
-  labs(title = "Kriging Variance for Iron Ore Fe Concentration",
-       x = "East",
-       y = "North")
+  labs(title = "Kriging Variance for Iron Ore Concentration",
+       x = "East (X)",
+       y = "North (Y)")
 
 #-----------------------------------------------------------#
 # Export the cleaned and merged data frame to an Excel file #
@@ -193,7 +198,7 @@ sd(df_merged$Fe)
 # Histogram #
 #-----------#
 
-hist(df_merged$Fe, xlab = "Fe (%)", main = "Histogram of Iron Deposit (%)")
+hist(df_merged$Fe, xlab = "Fe (%)", main = "Histogram of Iron Ore Concentration")
 
 #-----------------------------------------#
 # Generating frequency tables using dplyr #
@@ -236,7 +241,7 @@ print(cross_table)
 # Correlation Coefficient #
 #-------------------------#
 
-cor(df_merged$Fe, df_merged$AL2O3)
+#cor(df_merged$Fe, df_merged$AL2O3)
 
 # Select columns of interest
 columns_of_interest <- c("Fe", "AL2O3", "Mn", "P")
@@ -265,7 +270,6 @@ ggplot(df_merged, aes(x = East, y = North, color = Fe)) +
     panel.grid.major = element_blank(),                    # Remove major grid lines
     panel.grid.minor = element_blank()                     # Remove minor grid lines
   )
-
 
 ##########################################
 
