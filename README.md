@@ -27,6 +27,9 @@ There were several rows with partial or completely missing values (replaced by -
 
 **Correlation Matrix**
 
+<img width="305" alt="image" src="https://github.com/user-attachments/assets/e20ef366-7a22-4e2f-8243-c2e226bab250">
+
+
 **Frequency Distributions and Cross Tables**
 
 - Frequency and relative frequency table for Fe Concentration. DONE
