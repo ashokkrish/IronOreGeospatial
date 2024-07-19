@@ -22,15 +22,19 @@ There were several rows with partial or completely missing values (replaced by -
 
 **Descriptive Statistics**
 
+- Mean, five-number summary, standard deviation etc for Fe concentration. DONE.
+
 **Frequency Distributions and Cross Tables**
 
+- Frequency and relative frequency table for Fe Concentration. DONE
+
 **Exploratory Data Analysis**
+
+- Histogram for Fe Concentration. DONE
 
 **Variogram**
 
 ![image](https://github.com/user-attachments/assets/e63d4fb9-8069-4bc5-bcf1-9c871251638e)
-
-
 
 **Variogram Parameters**
 
