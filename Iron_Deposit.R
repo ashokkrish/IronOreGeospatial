@@ -271,72 +271,57 @@ ggplot(df_merged, aes(x = East, y = North, color = Fe)) +
     panel.grid.minor = element_blank()                     # Remove minor grid lines
   )
 
-##########################################
+##########################################NEW
 
-## install.packages("sf")
-# library(sf)
-# 
-# # Assuming the UTM Zone is 19S
-# utm_crs <- st_crs("+proj=utm +zone=19 +south +datum=WGS84 +units=m +no_defs")
-# wgs84_crs <- st_crs(4326)  # WGS84
-# 
-# # Create an sf object from the data frame
-# df_sf <- st_as_sf(df_merged, coords = c("East", "North"), crs = utm_crs)
-# 
-# # Transform the coordinates to WGS84
-# df_sf <- st_transform(df_sf, crs = wgs84_crs)
-# 
-# # Extract the Lat and Lon coordinates back into the data frame
-# df_merged <- df_merged %>%
-#   mutate(Latitude = st_coordinates(df_sf)[,2],
-#          Longitude = st_coordinates(df_sf)[,1])
-# 
-# # Display the first few rows of the updated data frame
-# head(df_merged)
+library(revgeo)
+library(terra)
 
-##########################################
+# Function to convert UTM to lat/lon using terra
+convert_utm_to_latlon <- function(easting, northing, zone = 19, hemisphere = "S") {
+  # Create a SpatVector object with the UTM coordinates and UTM CRS
+  crs_string <- paste0("+proj=utm +zone=", zone, ifelse(hemisphere == "N", " +north", " +south"), " +datum=WGS84")
+  vect_utm <- vect(cbind(easting, northing), crs = crs_string)
+  
+  # Transform to lat/lon
+  vect_latlon <- project(vect_utm, "+proj=longlat +datum=WGS84")
+  
+  # Extract the coordinates
+  coords <- as.data.frame(geom(vect_latlon))
+  return(coords)
+}
 
-# # install.packages("revgeo")
-# # install.packages("terra")
-# 
-# library(revgeo)
-# library(terra)
-# 
-# # Function to convert UTM to lat/lon using terra
-# convert_utm_to_latlon <- function(easting, northing, zone = 33, hemisphere = "N") {
-#   # Create a SpatVector object with the UTM coordinates and UTM CRS
-#   crs_string <- paste0("+proj=utm +zone=", zone, ifelse(hemisphere == "N", " +north", " +south"), " +datum=WGS84")
-#   vect_utm <- vect(cbind(easting, northing), crs = crs_string)
-#   
-#   # Transform to lat/lon
-#   vect_latlon <- project(vect_utm, "+proj=longlat +datum=WGS84")
-#   
-#   # Extract the coordinates
-#   coords <- as.data.frame(geom(vect_latlon))
-#   return(coords)
-# }
-# 
-# # Apply the conversion function
-# latlon <- convert_utm_to_latlon(df_merged$East, df_merged$North)
-# 
-# # Add the lat/lon to the original data frame
-# df_merged$Latitude <- latlon$y
-# df_merged$Longitude <- latlon$x
-# 
-# # Function to get the country based on coordinates
-# get_country_revgeo <- function(lat, lon) {
-#   result <- revgeo(lat, lon, provider = "photon", output = "frame")
-#   return(result$country)
-# }
-# 
-# # Apply the function to each row of the data frame
-# df_merged$Country <- mapply(get_country_revgeo, df_merged$Latitude, df_merged$Longitude)
-# 
-# # Print the updated data frame with the country information
-# print(df_merged)
+utm_zone <- 18  # Adjust this as needed for your data's longitude
+
+# Apply the conversion function
+latlon <- convert_utm_to_latlon(df_merged$North, df_merged$East, zone = utm_zone)
+
+# Add the lat/lon to the original data frame
+df_merged$Latitude <- latlon$y
+df_merged$Longitude <- latlon$x
+
+# Function to get the country based on coordinates
+get_country_revgeo <- function(lat, lon) {
+  result <- revgeo(lat, lon, provider = "photon", output = "frame")
+  return(result$country)
+}
+
+# Apply the function to each row of the data frame
+df_merged$Country <- mapply(get_country_revgeo, df_merged$Latitude, df_merged$Longitude)
+
+# Print the updated data frame with the country information
+print(df_merged)
 
 ##########################################
+# Specify the UTM zone for Chile
 
+## Chile spans several UTM zones due to its long, narrow shape. The main UTM zones covering Chile are:
+##   
+## Zone 18S: Covers the far northern part of Chile (west of 72°W longitude).
+## Zone 19S: Covers most of the central part of Chile (between 72°W and 66°W longitude).
+## Zone 20S: Covers the far southern part of Chile (east of 66°W longitude).
+## For most regions of central Chile, Zone 19S is the appropriate UTM zone to use.
+##########################################
+#
 # # Function to create plots with different viridis options
 # create_plot <- function(option) {
 #   ggplot(df_merged, aes(x = `East (X)`, y = `North (Y)`, color = Fe)) +
@@ -367,9 +352,9 @@ ggplot(df_merged, aes(x = East, y = North, color = Fe)) +
 # for (plot in plots) {
 #   print(plot)
 # }
-
+#
 ##########################################
-
+#
 # install.packages("scatterplot3d")
 # library(scatterplot3d)
 # # Create 3D scatter plot
@@ -378,5 +363,32 @@ ggplot(df_merged, aes(x = East, y = North, color = Fe)) +
 #               ylab = "North (Y)", 
 #               zlab = "Elevation (Z)", 
 #               main = "3D Scatter Plot of Spatial Data")
+#
+##########################################
+# 
+# # install.packages("sf")
+# library(sf)
+# 
+# # Assuming the UTM Zone is 19S
+# utm_crs <- st_crs("+proj=utm +zone=19 +south +datum=WGS84 +units=m +no_defs")
+# wgs84_crs <- st_crs(4326)  # WGS84
+# 
+# # Create an sf object from the data frame
+# ?sf::st_as_sf
+# 
+# df_sf <- st_as_sf(df_merged, coords = c("East", "North"), crs = utm_crs)
+# 
+# # Transform the coordinates to WGS84
+# ?sf::st_transform
+# 
+# df_sf <- st_transform(df_sf, crs = wgs84_crs)
+# 
+# # Extract the Lat and Lon coordinates back into the data frame
+# df_merged <- df_merged %>%
+#   mutate(Latitude = st_coordinates(df_sf)[,2],
+#          Longitude = st_coordinates(df_sf)[,1])
+# 
+# # Display the first few rows of the updated data frame
+# head(df_merged)
 
 ##########################################
